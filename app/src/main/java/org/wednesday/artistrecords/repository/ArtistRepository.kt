@@ -1,5 +1,6 @@
 package org.wednesday.artistrecords.repository
 
+import androidx.lifecycle.LiveData
 import org.wednesday.api.ITunesClient
 import org.wednesday.api.model.Artist
 import org.wednesday.artistrecords.db.ArtistDatabase
@@ -15,5 +16,5 @@ class ArtistRepository(
 
     suspend fun insert(artist: Artist)= db.getArtistDao().upsertArtist(artist)
 
-    fun getArtist(term:String)= db.getArtistDao().getAllArtist(term)
+    fun getArtist(term:String): LiveData<List<Artist>> = db.getArtistDao().getAllArtist(term)
 }

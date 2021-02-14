@@ -19,6 +19,7 @@
             android:layout_height="150dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
             android:layout_marginEnd="16dp"
             android:contentDescription="TODO"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +33,9 @@
             android:layout_height="24dp"
             android:layout_marginStart="28dp"
             android:layout_marginTop="19dp"
+            android:layout_marginEnd="64dp"
             android:text="SongName"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/songPoster" />
 
@@ -43,7 +46,7 @@
             android:layout_marginStart="28dp"
             android:layout_marginTop="11dp"
             android:layout_marginEnd="130dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="24dp"
             android:text="Album"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

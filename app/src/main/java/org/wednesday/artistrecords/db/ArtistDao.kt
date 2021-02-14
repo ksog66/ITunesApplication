@@ -13,6 +13,6 @@ interface ArtistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertArtist(artist: Artist) :Long
 
-    @Query("Select * from artist where term=:term")
-    fun getAllArtist(term:String) : LiveData<List<Artist>>
+    @Query("Select * from artist where term=:item limit 20")
+    fun getAllArtist(item:String) : LiveData<List<Artist>>
 }

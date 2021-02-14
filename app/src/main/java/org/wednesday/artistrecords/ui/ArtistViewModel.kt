@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities.*
 import android.os.Build
+import android.widget.Toast
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import org.wednesday.artistrecords.ArtistApplication
@@ -18,35 +19,38 @@ class ArtistViewModel(
     : AndroidViewModel(app) {
 
         private val _data= MutableLiveData<List<Artist>>()
-        val data:LiveData<List<Artist>> = _data
+        var data:LiveData<List<Artist>> = _data
 
 
         fun search(artistName: String){
-            if(hasInternetConnection()){
-                searchArtist(artistName)
-            }else{
-                searchFromRoom(artistName)
-            }
+            searchArtist(artistName)
         }
 
-    private fun searchFromRoom(artistName: String) =viewModelScope.launch {
-        artistRepository.getArtist(artistName)?.let {
-            val localData=it.value
-            _data.postValue(localData!!)
-        }
+    private fun searchFromRoom(artistName: String){
+        data= artistRepository.getArtist(artistName)
     }
 
     private fun searchArtist(artistName:String)=viewModelScope.launch {
-        artistRepository.searchArtist(artistName)?.let {
+        try {
+            if(hasInternetConnection()) {
+                artistRepository.searchArtist(artistName)?.let {
 
-            val currentData=it
-            for (i in 0..currentData.size-1){
-                currentData[i].term= artistName
-                artistRepository.insert(currentData[i])
+                    val currentData = it
+                    for (i in currentData.indices) {
+                        currentData[i].term = artistName
+                        artistRepository.insert(currentData[i])
+                    }
+                    _data.postValue(currentData)
+
+                }
+            }else{
+                searchFromRoom(artistName)
             }
-            _data.postValue(currentData)
+        }catch (e:Exception){
+            Toast.makeText(getApplication(),"Internet Problem",Toast.LENGTH_SHORT).show()
 
         }
+
     }
 
     private fun hasInternetConnection():Boolean{
