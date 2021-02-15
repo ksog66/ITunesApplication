@@ -11,6 +11,7 @@ import androidx.test.filters.SmallTest
 import junit.framework.TestCase.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -19,6 +20,7 @@ import org.wednesday.api.ITunesClient
 import org.wednesday.api.model.Artist
 import org.wednesday.artistrecords.db.ArtistDao
 import org.wednesday.artistrecords.db.ArtistDatabase
+import org.wednesday.artistrecords.db.Records
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -52,28 +54,26 @@ class RoomAndApiTest {
             val artist = iTunesClient.api.getArtist("drake")
             list = artist.body()!!.results
             assertNotNull(list)
-            for(i in list.indices){
-                list[i].term="drake"
-                dao.upsertArtist(list[i])
+            val recordsList=list.asDomainModel()
+            for(i in recordsList.indices){
+                recordsList[i].term="drake"
+                dao.upsertArtist(recordsList[i])
             }
-        }
-        val allArtist=dao.getAllArtist("drake").blockingObserve()
-        assertNotNull(allArtist)
+            val allArtist=dao.getAllArtist("drake")
+            assertNotNull(allArtist)
 
+        }
     }
 
-    private fun <T> LiveData<T>.blockingObserve(): T? {
-        var value: T? = null
-        val latch = CountDownLatch(1)
-
-        val observer = Observer<T> { t ->
-            value = t
-            latch.countDown()
+    fun List<Artist>.asDomainModel(): List<Records> {
+        return map {
+            Records(
+                term = it.term,
+                artworkUrl100 = it.artworkUrl100,
+                artworkUrl30 = it.artworkUrl30,
+                artworkUrl60 = it.artworkUrl60,
+                trackName = it.trackName,
+                collectionName= it.collectionName)
         }
-
-        observeForever(observer)
-
-        latch.await(2, TimeUnit.SECONDS)
-        return value
     }
 }
