@@ -1,6 +1,7 @@
 package org.wednesday.artistrecords.db
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,6 +14,6 @@ interface ArtistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertArtist(artist: Artist) :Long
 
-    @Query("Select * from artist where term=:item limit 20")
-    fun getAllArtist(item:String) : LiveData<List<Artist>>
+    @Query("Select * from artist  where term=:term")
+    fun getAllArtist(term:String) :LiveData<List<Artist>>
 }

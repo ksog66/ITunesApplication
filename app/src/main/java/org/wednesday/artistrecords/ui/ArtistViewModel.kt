@@ -6,8 +6,10 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities.*
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.wednesday.artistrecords.ArtistApplication
 import org.wednesday.api.model.Artist
@@ -27,10 +29,11 @@ class ArtistViewModel(
         }
 
     private fun searchFromRoom(artistName: String){
-        data= artistRepository.getArtist(artistName)
+        Log.d("RoomStrace","viewModel")
+        data=artistRepository.getArtist(artistName)
     }
 
-    private fun searchArtist(artistName:String)=viewModelScope.launch {
+    private fun searchArtist(artistName:String)=viewModelScope.launch(Dispatchers.IO) {
         try {
             if(hasInternetConnection()) {
                 artistRepository.searchArtist(artistName)?.let {
@@ -44,10 +47,11 @@ class ArtistViewModel(
 
                 }
             }else{
+                Log.d("RoomStrace","NoInternet")
                 searchFromRoom(artistName)
             }
         }catch (e:Exception){
-            Toast.makeText(getApplication(),"Internet Problem",Toast.LENGTH_SHORT).show()
+            Toast.makeText(getApplication(),e.localizedMessage,Toast.LENGTH_SHORT).show()
 
         }
 

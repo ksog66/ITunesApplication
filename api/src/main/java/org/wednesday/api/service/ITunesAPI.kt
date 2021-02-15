@@ -10,6 +10,6 @@ interface ITunesAPI {
     @GET("/search")
     suspend fun getArtist(
         @Query("term")
-        artistName: String
+        artistname: String
     ): Response<ArtistResponse>
 }
