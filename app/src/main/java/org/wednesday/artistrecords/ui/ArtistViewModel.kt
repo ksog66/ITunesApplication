@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import org.wednesday.artistrecords.ArtistApplication
 import org.wednesday.api.model.Artist
 import org.wednesday.artistrecords.db.Records
@@ -33,33 +34,32 @@ class ArtistViewModel(
             }
         }
 
-    private fun searchFromRoom(artistName: String){
-        Log.d("RoomStrace","viewModel")
-        data=artistRepository.getArtist(artistName)
+    private fun searchFromRoom(artistName: String) {
+        data = artistRepository.getArtist(artistName)
     }
 
-    private fun searchArtist(artistName:String)=viewModelScope.launch(Dispatchers.IO) {
-        try {
-            if(hasInternetConnection()) {
-                artistRepository.searchArtist(artistName)?.let {
+        private fun searchArtist(artistName:String)=viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if(hasInternetConnection()) {
+                    artistRepository.searchArtist(artistName)?.let {
 
-                    val currentData = it.asDomainModel()
-                    for (i in currentData.indices) {
-                        currentData[i].term = artistName
-                        artistRepository.insert(currentData[i])
+                        val currentData = it.asDomainModel()
+                        for (i in currentData.indices) {
+                            currentData[i].term = artistName
+                            artistRepository.insert(currentData[i])
+                        }
+                        _data.postValue(currentData)
+
                     }
-                    _data.postValue(currentData)
-
                 }
+            }catch (e:Exception){
+                Toast.makeText(getApplication(),e.localizedMessage,Toast.LENGTH_SHORT).show()
+
             }
-        }catch (e:Exception){
-            Toast.makeText(getApplication(),e.localizedMessage,Toast.LENGTH_SHORT).show()
 
         }
 
-    }
-
-    private fun hasInternetConnection():Boolean{
+        private fun hasInternetConnection():Boolean{
             val connectivityManger= getApplication<ArtistApplication>().getSystemService(
                 Context.CONNECTIVITY_SERVICE
             ) as ConnectivityManager
@@ -70,8 +70,8 @@ class ArtistViewModel(
 
                 return when{
                     capabilities.hasTransport(TRANSPORT_WIFI) ||
-                    capabilities.hasTransport(TRANSPORT_CELLULAR) ||
-                    capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
+                            capabilities.hasTransport(TRANSPORT_CELLULAR) ||
+                            capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
 
                     else-> false
                 }
@@ -89,17 +89,17 @@ class ArtistViewModel(
         }
 
 
-    fun List<Artist>.asDomainModel(): List<Records> {
-        return map {
-            Records(
-                term = it.term,
-                artworkUrl100 = it.artworkUrl100,
-                artworkUrl30 = it.artworkUrl30,
-                artworkUrl60 = it.artworkUrl60,
-                trackName = it.trackName,
-                collectionName= it.collectionName)
+        fun List<Artist>.asDomainModel(): List<Records> {
+            return map {
+                Records(
+                    term = it.term,
+                    artworkUrl100 = it.artworkUrl100,
+                    artworkUrl30 = it.artworkUrl30,
+                    artworkUrl60 = it.artworkUrl60,
+                    trackName = it.trackName,
+                    collectionName= it.collectionName)
+            }
         }
     }
-}
 
 

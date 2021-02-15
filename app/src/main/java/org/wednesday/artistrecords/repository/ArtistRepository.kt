@@ -20,7 +20,7 @@ class ArtistRepository(
 
     fun getArtist(term: String) :LiveData<List<Records>>{
         Log.d("RoomStrace","Repository")
-        return db.getArtistDao().getAllArtist(term)
+        return db.getArtistDao().getAllArtist()
     }
 
 }
