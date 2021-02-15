@@ -12,8 +12,8 @@ import org.wednesday.api.model.Artist
 interface ArtistDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertArtist(artist: Artist) :Long
+    suspend fun upsertArtist(record: Records) :Long
 
     @Query("Select * from artist  where term=:term")
-    fun getAllArtist(term:String) :LiveData<List<Artist>>
+    fun getAllArtist(term:String) :LiveData<List<Records>>
 }

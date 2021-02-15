@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import org.wednesday.api.model.Artist
 
 @Database(
-    entities = [Artist::class],
+    entities = [Records::class],
     version= 1
 )
 abstract class ArtistDatabase : RoomDatabase(){

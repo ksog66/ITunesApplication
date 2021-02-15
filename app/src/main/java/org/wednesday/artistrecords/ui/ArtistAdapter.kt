@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.wednesday.api.model.Artist
 import org.wednesday.artistrecords.R
+import org.wednesday.artistrecords.db.Records
 
 class ArtistAdapter(private val context: Context): RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
-    private val allArtistItem=ArrayList<Artist>()
+    private val allArtistItem=ArrayList<Records>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
         val view=LayoutInflater.from(context)
             .inflate(R.layout.artist_item,parent,false)
@@ -36,7 +37,7 @@ class ArtistAdapter(private val context: Context): RecyclerView.Adapter<ArtistAd
         val album=itemView.findViewById<TextView>(R.id.albumTv)
     }
 
-    fun update(artistItem:List<Artist>){
+    fun update(artistItem:List<Records>){
         allArtistItem.clear()
         allArtistItem.addAll(artistItem)
         notifyDataSetChanged()

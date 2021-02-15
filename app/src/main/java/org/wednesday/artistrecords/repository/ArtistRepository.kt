@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import org.wednesday.api.ITunesClient
 import org.wednesday.api.model.Artist
 import org.wednesday.artistrecords.db.ArtistDatabase
+import org.wednesday.artistrecords.db.Records
 
 class ArtistRepository(
     private val db: ArtistDatabase
@@ -15,9 +16,9 @@ class ArtistRepository(
         api.getArtist(searchQuery).body()?.results
 
 
-    suspend fun insert(artist: Artist)= db.getArtistDao().upsertArtist(artist)
+    suspend fun insert(record: Records)= db.getArtistDao().upsertArtist(record)
 
-    fun getArtist(term: String) :LiveData<List<Artist>>{
+    fun getArtist(term: String) :LiveData<List<Records>>{
         Log.d("RoomStrace","Repository")
         return db.getArtistDao().getAllArtist(term)
     }

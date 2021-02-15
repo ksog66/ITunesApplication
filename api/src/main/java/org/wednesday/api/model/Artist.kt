@@ -1,18 +1,12 @@
 package org.wednesday.api.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@Entity(
-    tableName = "artist"
-)
+
 @JsonClass(generateAdapter = true)
 data class Artist(
-    @PrimaryKey(autoGenerate = true)
-    val id:Int?,
-    var term:String?,
+    val term:String?,
     @Json(name = "artistId")
     val artistId: Int?,
     @Json(name = "artistName")
@@ -102,3 +96,4 @@ data class Artist(
     @Json(name = "wrapperType")
     val wrapperType: String?
 )
+

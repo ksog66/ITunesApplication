@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.wednesday.artistrecords.ArtistApplication
 import org.wednesday.api.model.Artist
+import org.wednesday.artistrecords.db.Records
 import org.wednesday.artistrecords.repository.ArtistRepository
 
 class ArtistViewModel(
@@ -20,12 +21,16 @@ class ArtistViewModel(
     val artistRepository: ArtistRepository)
     : AndroidViewModel(app) {
 
-        private val _data= MutableLiveData<List<Artist>>()
-        var data:LiveData<List<Artist>> = _data
+        private val _data= MutableLiveData<List<Records>>()
+        var data:LiveData<List<Records>> = _data
 
 
         fun search(artistName: String){
-            searchArtist(artistName)
+            if(hasInternetConnection()){
+                searchArtist(artistName)
+            }else {
+                searchFromRoom(artistName)
+            }
         }
 
     private fun searchFromRoom(artistName: String){
@@ -38,7 +43,7 @@ class ArtistViewModel(
             if(hasInternetConnection()) {
                 artistRepository.searchArtist(artistName)?.let {
 
-                    val currentData = it
+                    val currentData = it.asDomainModel()
                     for (i in currentData.indices) {
                         currentData[i].term = artistName
                         artistRepository.insert(currentData[i])
@@ -46,9 +51,6 @@ class ArtistViewModel(
                     _data.postValue(currentData)
 
                 }
-            }else{
-                Log.d("RoomStrace","NoInternet")
-                searchFromRoom(artistName)
             }
         }catch (e:Exception){
             Toast.makeText(getApplication(),e.localizedMessage,Toast.LENGTH_SHORT).show()
@@ -85,6 +87,19 @@ class ArtistViewModel(
             }
             return false
         }
+
+
+    fun List<Artist>.asDomainModel(): List<Records> {
+        return map {
+            Records(
+                term = it.term,
+                artworkUrl100 = it.artworkUrl100,
+                artworkUrl30 = it.artworkUrl30,
+                artworkUrl60 = it.artworkUrl60,
+                trackName = it.trackName,
+                collectionName= it.collectionName)
+        }
+    }
 }
 
 
