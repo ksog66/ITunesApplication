@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
+    android:layout_margin="5dp"
     android:elevation="15dp"
     app:cardCornerRadius="3dp">
 
@@ -16,26 +16,31 @@
         <ImageView
             android:id="@+id/songPoster"
             android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:scaleType="fitCenter"
-            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="19dp"
             android:contentDescription="TODO"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/songNameTv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/songNameTv"
-            android:layout_width="106dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="29dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginEnd="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginBottom="11dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="SongName"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/albumTv"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/songPoster" />
 
@@ -43,14 +48,13 @@
             android:id="@+id/albumTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="130dp"
-            android:layout_marginBottom="24dp"
+            android:lines="1"
             android:text="Album"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/songNameTv"
             app:layout_constraintTop_toBottomOf="@+id/songNameTv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
