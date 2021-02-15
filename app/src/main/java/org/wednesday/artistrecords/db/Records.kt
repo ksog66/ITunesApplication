@@ -5,15 +5,16 @@ import androidx.room.PrimaryKey
 
 
 @Entity(
-    tableName = "artist"
+    tableName = "records"
 )
-data class Records(
-    @PrimaryKey(autoGenerate = true)
-    val id:Int=0,
+class Records(
     var term:String?,
     val artworkUrl100: String?,
     val artworkUrl30: String?,
     val artworkUrl60: String?,
     val trackName: String?,
     val collectionName: String?
-)
+){
+    @PrimaryKey(autoGenerate = true)
+    var id:Int=0
+}

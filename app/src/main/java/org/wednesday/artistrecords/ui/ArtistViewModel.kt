@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Dispatcher
 import org.wednesday.artistrecords.ArtistApplication
 import org.wednesday.api.model.Artist
@@ -23,7 +24,7 @@ class ArtistViewModel(
     : AndroidViewModel(app) {
 
         private val _data= MutableLiveData<List<Records>>()
-        var data:LiveData<List<Records>> = _data
+        val data:LiveData<List<Records>> = _data
 
 
         fun search(artistName: String){
@@ -34,8 +35,11 @@ class ArtistViewModel(
             }
         }
 
-    private fun searchFromRoom(artistName: String) {
-        data = artistRepository.getArtist(artistName)
+    private fun searchFromRoom(artistName: String) =viewModelScope.launch{
+        artistRepository.getArtist(artistName).let{
+            _data.postValue(it)
+        }
+
     }
 
         private fun searchArtist(artistName:String)=viewModelScope.launch(Dispatchers.IO) {

@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import org.wednesday.api.model.Artist
-
 @Database(
     entities = [Records::class],
     version= 1

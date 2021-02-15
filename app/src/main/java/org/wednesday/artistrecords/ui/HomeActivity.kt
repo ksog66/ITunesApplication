@@ -33,7 +33,6 @@ class HomeActivity : AppCompatActivity() ,SearchView.OnQueryTextListener{
         //LiveDataObserver
         viewModel.data.observe(this, {
             if(it!=null){
-                Toast.makeText(this,"Live Data Changed",Toast.LENGTH_SHORT).show()
                 artistAdapter.update(it)
             }
         })
